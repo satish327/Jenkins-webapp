@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Pre Build Action') {
+            steps {
+                sh 'npm install'
+                sh 'sudo apt install nginx -y'
+                sh 'sudo systemctl status nginx'
+                sh 'sudo systemctl start nginx'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Post Build Action') {
+            steps {
+                echo "Build Completed Successfully"
+                sh 'sudo cp -r dist/* /var/www/html/'
+                sh 'sudo systemctl restart nginx'
+            }
+        }
+    }
+}
