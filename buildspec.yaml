@@ -15,6 +15,14 @@ phases:
   post_build:
     commands:
       - echo Build completed on 'date'
+      - mkdir deploy
+      - cp -r dist deploy/dist
+      - mv appsec.yaml appsec.yml 
+      - cp appsec.yml deploy/
+      - cp -r script deploy/
+      - chmod +x deploy/scripts/restartNginx.sh
+      - chmod +x deploy/scripts/appStop.sh 
+
 
 artifacts:
   files:
