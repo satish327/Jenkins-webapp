@@ -17,7 +17,7 @@ phases:
       - echo Build completed on 'date'
       - mkdir deploy
       - cp -r dist deploy/dist
-      - mv appsec.yaml appsec.yml 
+      - mv appspec.yaml appspec.yml 
       - cp appsec.yml deploy/
       - cp -r scripts deploy/
       - chmod +x deploy/scripts/restartNginx.sh
