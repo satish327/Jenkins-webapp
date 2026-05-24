@@ -19,7 +19,7 @@ phases:
       - cp -r dist deploy/dist
       - mv appsec.yaml appsec.yml 
       - cp appsec.yml deploy/
-      - cp -r script deploy/
+      - cp -r scripts deploy/
       - chmod +x deploy/scripts/restartNginx.sh
       - chmod +x deploy/scripts/appStop.sh 
 
