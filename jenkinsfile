@@ -44,7 +44,7 @@ pipeline {
             }
         }
         stage{'Push Image'} {
-            step {
+            steps {
                 sh '''
                 docker push $IMAGE_NAME:$IMAGE_TAG
                 docker tag \
@@ -57,7 +57,7 @@ pipeline {
             
         }
         stage{'Deploy To App Server'} {
-            step {
+            steps {
                 sh """
                 ssh ubuntu@$APP_SERVER '
                 docker pull $IMAGE_NAME:latest
