@@ -54,7 +54,7 @@ pipeline {
                 '''
             }
         
-            )
+            
         }
         stage{'Deploy To App Server'} {
             step {
