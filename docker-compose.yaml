@@ -16,7 +16,7 @@ services:
 
 
   backend:
-    image: backend:v1
+    image: satishkahar/backend:v1
     container_name: backend
     restart: always
     depends_on:
@@ -26,7 +26,7 @@ services:
 
 
   frontend:
-    image: frontend:v1
+    image: satishkahar/frontend:v1
     container_name: frontend
     restart: always
     depends_on:
