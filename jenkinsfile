@@ -5,7 +5,7 @@ pipeline{
         ACCOUNT_ID = '239857123300'
         REPOSITORY = 'frontend'
         IMAGE_TAG = '${BUILD_NUMBER}'
-        ECR_URI = "${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY}:${IMAGE_TAG}"
+        ECR_URI = "${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPOSITORY}"
         ACCESS_KEY_ID = credentials('ACCESS_KEY_ID') 
         SECRET_ACCESS_KEY = credentials('SECRET_ACCESS_KEY')
         CLUSTER_NAME = 'default'
@@ -25,16 +25,23 @@ pipeline{
             }
         }
         stage('Login to AWS ECR'){
-            steps{
+            steps {
                 withCredentials([
                     string(credentialsId: 'ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'),
                     string(credentialsId: 'SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
-                sh """
-                aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-                """
+                    sh """
+                        export AWS_DEFAULT_REGION=${AWS_REGION}
+
+                        aws sts get-caller-identity
+
+                        aws ecr get-login-password --region ${AWS_REGION} | \
+                        docker login \
+                        --username AWS \
+                        --password-stdin ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                    """
+                }
             }
-        }
         }
         stage ('Login to AWS CLI'){
             steps{
@@ -49,7 +56,9 @@ pipeline{
             steps{
                 sh """
                 docker tag ${REPOSITORY}:${IMAGE_TAG} ${ECR_URI}
+                docker tag ${REPOSITORY}:${IMAGE_TAG} ${ECR_URI}:latest
                 docker push ${ECR_URI}
+                docker push ${ECR_URI}:latest
                 """
             }
         }
